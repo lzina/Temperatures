@@ -4,79 +4,97 @@ using namespace std;
 class Fahrenheit
 {
 public:
-	Fahrenheit(const float t)
+	Fahrenheit(const double b, const double f, const double z)
 	{
-		m_temp = t;
+		m_boiling = b;
+		m_freezing = f;
+		m_zero = z;
 	}
-	float GetTemp() const
+	double GetBoilingPoint() const
 	{
-		return m_temp;
+		return m_boiling;
 	}
-	operator float()
+	double GetFreezingPoint() const
 	{
-		float tempInCelsius = (m_temp - 32) * 5 / 9;
-		return tempInCelsius;
+		return m_freezing;
 	}
-
-	
-
+	double GetAbsoluteZero() const
+	{
+		return m_zero;
+	}
 private:
-	float m_temp;
+	double m_boiling;
+	double m_freezing;
+	double m_zero;
 };
 
 ostream& operator<<(ostream& os, const Fahrenheit& f)
 {
-	os << "The temperatures are " << f.GetTemp() << " degrees Fahrenheit\n";
-	os << "The boiling point is 212 degrees Fahrenheit\n";
-	os << "The freezing point is 32 degrees Fahrenheit\n";
-	os << "The absolute zero 459.67 degrees Fahrenheit\n";
+
+	os << "The boiling point is " << f.GetBoilingPoint() << " degrees Fahrenheit\n";
+	os << "The freezing point is " << f.GetFreezingPoint() << " degrees Fahrenheit\n";
+	os << "The absolute zero " << f.GetAbsoluteZero() << " degrees Fahrenheit\n";
 	return os;
 }
 
 class Celsius
 {
 public:
-	Celsius(const float t)
+	Celsius(const double b, const double f, const double z)
 	{
-		m_temp = t;
+		m_boiling = b;
+		m_freezing = f;
+		m_zero = z;
 	}
-	float GetTemp() const
+	double GetBoilingPoint() const
 	{
-		return m_temp;
+		return m_boiling;
+	}
+	double GetFreezingPoint() const
+	{
+		return m_freezing;
+	}
+	double GetAbsoluteZero() const
+	{
+		return m_zero;
 	}
 	Celsius(const Fahrenheit& t)
 	{
-		m_temp = (t.GetTemp() - 32) * 5 / 9;
+		m_boiling = (t.GetBoilingPoint() - 32) * 5 / 9;
+		m_freezing = (t.GetFreezingPoint() - 32) * 5 / 9;
+		m_zero = (t.GetAbsoluteZero() - 32) * 5 / 9;
 	}
 	operator Fahrenheit() const
 	{
-		float tempInCelsius = m_temp * 9 / 5 + 32;
-		return Fahrenheit(tempInCelsius);
+		double boiling = GetBoilingPoint() * 9 / 5 + 32;
+		double freezing = GetFreezingPoint() * 9 / 5 + 32;
+		double zero = GetAbsoluteZero() * 9 / 5 + 32;
+
+		return Fahrenheit(boiling, freezing, zero);
 	}
 
 private:
-	float m_temp;
+	double m_boiling;
+	double m_freezing;
+	double m_zero;
 };
 
 ostream& operator<<(ostream& os, const Celsius& c)
 {
-	os << "The temperatures are " << c.GetTemp() << " degrees Celsius\n";
-	os << "The boiling point is 100 degrees Celsius\n";
-	os << "The freezing point is 0 degrees Celsius\n";
-	os << "The absolute zero 273.15 degrees Celsius\n";
+	os << "The boiling point is "<< c.GetBoilingPoint() <<" degrees Celsius\n";
+	os << "The freezing point is " << c.GetFreezingPoint() << " degrees Celsius\n";
+	os << "The absolute zero " << c.GetAbsoluteZero() << " degrees Celsius\n";
 	return os;
 }
 
 int main()
 {
-	Celsius c_temp(21.2);
-	Fahrenheit f_temp(56);
-	Fahrenheit f = static_cast<Fahrenheit>(c_temp);
+	Celsius c_temp(100, 0 , -273.15);
+	Fahrenheit f_temp = static_cast<Fahrenheit>(c_temp);
+	cout << "********** Celsius **************" << endl;
 	cout << c_temp;
-	cout << f;
+	cout << "********** Fahrenheit **************" << endl;
+	cout << f_temp;
 	
-	Celsius c2_temp(f_temp);
-	cout << c2_temp;
-
 	return 1;
 }
